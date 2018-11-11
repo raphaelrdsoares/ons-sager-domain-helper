@@ -8,6 +8,11 @@
  * @version 0.1.0
  * ---------------------------------------------------
  */
+//TODO: Colocar pop de confirmação na exclusão (enter pra confirmar e esc para cancelar)
+//TODO: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
+//TODO: Opção de expandar o registro pra ver seus dados
+//TODO: Opção de editar os dados de cada registro
+
 angular.module("app", []).controller("DomainController", [
 	"$scope",
 	"$sce",
