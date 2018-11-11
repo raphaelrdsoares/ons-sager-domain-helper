@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 	<head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>Page Title</title>
+		<title>ONS Sager Domain Helper</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content="" />
 		<meta name="author" content="Raphael R. D. Soares" />
@@ -17,6 +17,9 @@
 		<meta name="msapplication-TileColor" content="#383b43" />
 		<meta name="theme-color" content="#ffffff" />
 
+		<!-- Import Font Awesome -->
+		<link type="text/css" rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css" />
+
 		<!-- Import Google Icon and Fonts -->
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 		<link
@@ -27,14 +30,13 @@
 		<!-- build:css css/styles.min.css -->
 		<link type="text/css" rel="stylesheet" href="../node_modules/reset-css/reset.css" />
 		<link type="text/css" rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" />
-		<link type="text/css" rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css" />
 		<link type="text/css" rel="stylesheet" media="screen" href="css/main.css" />
 		<!-- endbuild -->
 	</head>
 
-	<body>
+	<body ng-controller="DomainController as controller">
 		<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-			<a class="navbar-brand" href="#">Navbar</a>
+			<a class="navbar-brand" href="#">ONS SAGER Domain Helper</a>
 			<button
 				class="navbar-toggler"
 				type="button"
@@ -58,22 +60,44 @@
 		</nav>
 
 		<main role="main" class="container">
-			<div class="starter-template">
-				<h1>Starter Template</h1>
-				<p class="lead">
-					Use this template as a way to quickly start any new front-end project.<br />
-					All you get is this text and a mostly barebones HTML, CSS and JS document.
-				</p>
-				<p>
-					See more in
-					<a
-						href="https://github.com/raphaelrdsoares/starter-template"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						https://github.com/raphaelrdsoares/starter-template
-					</a>
-				</p>
+			<div class="custom-panel shadow">
+				<form id="form_searchByURL" ng-submit="onSubmitSearch()">
+					<div class="form-row">
+						<div class="form-group col-md-10">
+							<input
+								type="url"
+								name="inpTxt_mainUrl"
+								id="inpTxt_mainUrl"
+								class="form-control"
+								placeholder="URL do serviço. Ex: http://localhost/sager/..."
+								ng-model="inpTxt_mainUrl"
+							/>
+						</div>
+						<div class="col-md-2">
+							<button type="submit" class="btn btn-primary btn-block">Buscar</button>
+						</div>
+					</div>
+				</form>
+				<div ng-show="records.length > 0">
+					<hr class="mb-4 mt-3" />
+					<div class="mb-3">
+						<button class="btn btn-outline-danger" ng-click="onDeleteAll()">Excluir todos</button>
+					</div>
+					<div>
+						<div class="border rounded p-2 mb-3" ng-repeat="record in records">
+							<i class="fas fa-caret-down mr-1"></i> {{ record.id }}
+							<div class="float-right mr-2">
+								<i
+									class="fas fa-trash"
+									data-toggle="tooltip"
+									data-placement="top"
+									title="Excluir registro"
+									ng-click="onDelete(record.id)"
+								></i>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</main>
 		<!-- /. container -->
@@ -82,6 +106,7 @@
 		<!-- JavaScript at end of body for optimized loading -->
 		<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
 		<script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+		<script type="text/javascript" src="../node_modules/angular/angular.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<!-- endbuild -->
 	</body>

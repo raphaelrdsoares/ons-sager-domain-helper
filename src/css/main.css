@@ -16,6 +16,7 @@ html {
 body {
 	padding-top: 5rem;
 	font-family: "Raleway", sans-serif;
+	background-color: #f1f0f1;
 }
 
 /* ================ CSS Queries to apply from a width and scape up ================ */
@@ -80,7 +81,8 @@ body {
 -------------------------------------------------- */
 /* Not required for template. */
 
-.starter-template {
+.custom-panel {
 	padding: 3rem 1.5rem;
-	text-align: center;
+	background-color: white;
+	/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
 }
