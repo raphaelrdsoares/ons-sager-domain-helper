@@ -41,6 +41,12 @@ angular.module("app", []).controller("DomainController", [
 			deleteRecords($scope.records);
 		};
 
+		$scope.onTextAreaKeyDownEvent = function($event, id) {
+			if ($event.ctrlKey && $event.keyCode === 13) {
+				$scope.onSaveEditRecord(id);
+			}
+		};
+
 		$scope.onEditRecord = function(id) {
 			var recordToEdit = undefined;
 			$scope.records.forEach(element => {
@@ -55,6 +61,7 @@ angular.module("app", []).controller("DomainController", [
 		};
 
 		$scope.onSaveEditRecord = function(id) {
+			$("#modal_edit").modal("hide");
 			var obj = JSON.parse($("#txtArea_editRecord").val());
 			$scope.records.forEach(element => {
 				if (element.id === id) {
@@ -110,14 +117,3 @@ angular.module("app", []).controller("DomainController", [
 		}
 	}
 ]);
-
-// $(document).ready(function() {
-// 	$("#form_searchByURL").submit(function(e) {
-// 		e.preventDefault();
-// 		var mainUrl = $("#inpTxt_mainUrl").val();
-
-// 		$.get(mainUrl, function(data, textStatus, jqXHR) {
-// 			console.log(data);
-// 		});
-// 	});
-// });
