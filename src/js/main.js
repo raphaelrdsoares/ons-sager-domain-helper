@@ -25,12 +25,18 @@ angular.module("app", []).controller("DomainController", [
 		$scope.inpTxt_mainUrl = "";
 		$scope.persistURL = "";
 		$scope.records = [];
+		$scope.recordIdToManipulate = "";
 
 		$scope.onSubmitSearch = function() {
 			refreshSearch();
 		};
 
+		$scope.onShowDeleteModal = function(id) {
+			$scope.recordIdToManipulate = id;
+		};
+
 		$scope.onDelete = function(id) {
+			$(".modal").modal("hide");
 			var recordToDelete = undefined;
 			$scope.records.forEach(element => {
 				if (element.id === id) recordToDelete = element;
@@ -39,6 +45,7 @@ angular.module("app", []).controller("DomainController", [
 		};
 
 		$scope.onDeleteAll = function() {
+			$(".modal").modal("hide");
 			deleteRecords($scope.records);
 		};
 
@@ -54,7 +61,8 @@ angular.module("app", []).controller("DomainController", [
 			}
 		};
 
-		$scope.onEditRecord = function(id) {
+		$scope.onShowEditModal = function(id) {
+			$scope.recordIdToManipulate = id;
 			var recordToEdit = undefined;
 			$scope.records.forEach(element => {
 				if (element.id === id) {
@@ -67,12 +75,12 @@ angular.module("app", []).controller("DomainController", [
 			});
 		};
 
-		$scope.onSaveEditRecord = function(id) {
+		$scope.onSaveEditRecord = function() {
 			$(".modal").modal("hide");
 			var obj = JSON.parse($("#txtArea_editRecord").val());
 			$scope.records.forEach(element => {
-				if (element.id === id) {
-					obj["id"] = id;
+				if (element.id === $scope.recordIdToManipulate) {
+					obj["id"] = $scope.recordIdToManipulate;
 					obj["_metadata"] = element._metadata;
 
 					updateRecord(obj);
@@ -80,11 +88,11 @@ angular.module("app", []).controller("DomainController", [
 			});
 		};
 
-		$scope.onSaveEditAsNewRecord = function(id) {
+		$scope.onSaveEditAsNewRecord = function() {
 			$(".modal").modal("hide");
 			var obj = JSON.parse($("#txtArea_editRecord").val());
 			$scope.records.forEach(element => {
-				if (element.id === id) {
+				if (element.id === $scope.recordIdToManipulate) {
 					obj["_metadata"] = element._metadata;
 
 					insertRecord(obj);
@@ -92,11 +100,11 @@ angular.module("app", []).controller("DomainController", [
 			});
 		};
 
-		$scope.onSaveCloneRecord = function(id) {
+		$scope.onSaveCloneRecord = function() {
 			$(".modal").modal("hide");
 			var obj = JSON.parse($("#txtArea_cloneRecord").val());
 			$scope.records.forEach(element => {
-				if (element.id === id) {
+				if (element.id === $scope.recordIdToManipulate) {
 					obj["_metadata"] = element._metadata;
 
 					insertRecord(obj);

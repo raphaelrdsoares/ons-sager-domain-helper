@@ -105,20 +105,21 @@
 										title="Clonar registro"
 										data-toggle="modal"
 										data-target="#modal_clone"
-										ng-click="onEditRecord(record.id)"
+										ng-click="onShowEditModal(record.id)"
 									></i>
 									<i
 										class="fas fa-edit pointer mr-2"
 										title="Editar registro"
 										data-toggle="modal"
 										data-target="#modal_edit"
-										ng-click="onEditRecord(record.id)"
+										ng-click="onShowEditModal(record.id)"
 									></i>
 									<i
 										class="fas fa-trash pointer"
 										title="Excluir registro"
 										data-toggle="modal"
 										data-target="#modal_confirmDeleteById"
+										ng-click="onShowDeleteModal(record.id)"
 									></i>
 								</div>
 							</div>
@@ -166,7 +167,7 @@
 													type="button"
 													class="btn btn-primary"
 													data-dismiss="modal"
-													ng-click="onSaveCloneRecord(record.id)"
+													ng-click="onSaveCloneRecord()"
 												>
 													Salvar
 												</button>
@@ -211,7 +212,7 @@
 													type="button"
 													class="btn btn-secondary"
 													data-dismiss="modal"
-													ng-click="onSaveEditAsNewRecord(record.id)"
+													ng-click="onSaveEditAsNewRecord()"
 												>
 													Salvar como um novo
 												</button>
@@ -219,7 +220,7 @@
 													type="button"
 													class="btn btn-primary"
 													data-dismiss="modal"
-													ng-click="onSaveEditRecord(record.id)"
+													ng-click="onSaveEditRecord()"
 												>
 													Salvar
 												</button>
@@ -247,6 +248,9 @@
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>
+										<div class="modal-body">
+											<p>Confirma a exclusão do registro {{ recordIdToManipulate }}</p>
+										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-outline-dark" data-dismiss="modal">
 												Cancelar
@@ -254,7 +258,8 @@
 											<button
 												type="button"
 												class="btn btn-primary"
-												ng-click="onDelete(record.id)"
+												data-dismiss="modal"
+												ng-click="onDelete(recordIdToManipulate)"
 											>
 												Confirmar
 											</button>
