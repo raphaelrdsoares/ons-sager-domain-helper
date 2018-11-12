@@ -12,6 +12,8 @@
 //OK: Colocar pop de confirmação na exclusão (enter pra confirmar e esc para cancelar)
 //InTest: Opção de editar os dados de cada registro
 
+//TODO: Opção de criar um clonar um registro
+
 //TODO: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
 //TODO: Subir a pasta /dist para o git e testar a execução usando apenas esta pasta num folder separado (desconfio que o font awesome não vai funcionar. Ajustar o build pra trazer o font awesome também)
@@ -110,14 +112,3 @@ angular.module("app", []).controller("DomainController", [
 		}
 	}
 ]);
-
-// $(document).ready(function() {
-// 	$("#form_searchByURL").submit(function(e) {
-// 		e.preventDefault();
-// 		var mainUrl = $("#inpTxt_mainUrl").val();
-
-// 		$.get(mainUrl, function(data, textStatus, jqXHR) {
-// 			console.log(data);
-// 		});
-// 	});
-// });
