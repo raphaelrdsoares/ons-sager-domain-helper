@@ -20,6 +20,14 @@
 //TODO: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
 
+var db = new Dexie("ONS_SAGER_DOMAIN_HELPER");
+db.version(1).stores({
+	urls: "++id,alias,url"
+	// ...add more stores (tables) here...
+});
+
+db.open();
+
 angular.module("app", ["cgNotify"]).controller("DomainController", [
 	"$scope",
 	"$sce",
@@ -27,9 +35,22 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 	"notify",
 	function($scope, $sce, $http, notify) {
 		$scope.inpTxt_mainUrl = "";
+		$scope.inpTxt_aliasUrl = "";
 		$scope.persistURL = "";
 		$scope.records = undefined;
 		$scope.recordIdToManipulate = "";
+
+		$scope.onSaveURL = function() {
+			if (inpTxt_aliasUrl.length > 0) {
+				var obj = {
+					alias: $scope.inpTxt_aliasUrl,
+					url: $scope.inpTxt_mainUrl
+				};
+				db.urls.add(obj).then(function(id) {
+					notifySuccess("URL salva com sucesso!");
+				});
+			}
+		};
 
 		$scope.onSubmitSearch = function() {
 			if ($scope.inpTxt_mainUrl.trim().length > 0) {

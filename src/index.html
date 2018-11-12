@@ -62,7 +62,7 @@
 			<div class="custom-panel shadow">
 				<form id="form_searchByURL" ng-submit="onSubmitSearch()">
 					<div class="form-row">
-						<div class="form-group col-md-10">
+						<div class="form-group col-md-8">
 							<input
 								type="url"
 								name="inpTxt_mainUrl"
@@ -75,13 +75,33 @@
 						<div class="col-md-2">
 							<button type="submit" class="btn btn-primary btn-block">Buscar</button>
 						</div>
-						<!--
-							<div class="col-md-2">
-								<button type="button" class="btn btn-outline-secondary btn-block">Salvar URL</button>
-							</div>
-						-->
+						<div class="col-md-2">
+							<button
+								type="button"
+								class="btn btn-outline-secondary btn-block"
+								data-toggle="collapse"
+								data-target="#div_saveURL"
+							>
+								Salvar URL
+							</button>
+						</div>
 					</div>
 				</form>
+				<div id="div_saveURL" class="form-row collapse">
+					<div class="form-group col-md-5">
+						<input
+							type="text"
+							name="inpTxt_aliasUrl"
+							id="inpTxt_aliasUrl"
+							class="form-control"
+							placeholder="Alias da URL. Ex: Consolidação Mensal"
+							ng-model="inpTxt_aliasUrl"
+						/>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-outline-primary" ng-click="onSaveURL()">Salvar</button>
+					</div>
+				</div>
 				<div id="div_records" ng-show="records">
 					<hr class="mb-4 mt-3" />
 					<div ng-show="records.length === 0"><p class="text-muted">Nenhum registro foi encontrado</p></div>
@@ -330,6 +350,7 @@
 		<script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
 		<script type="text/javascript" src="../node_modules/angular/angular.js"></script>
 		<script type="text/javascript" src="../node_modules/@cgross/angular-notify/dist/angular-notify.js"></script>
+		<script type="text/javascript" src="../node_modules/dexie/dist/dexie.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 		<!-- endbuild -->
 	</body>
