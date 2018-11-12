@@ -10,9 +10,8 @@
  */
 //OK: Opção de expandar o registro pra ver seus dados
 //OK: Colocar pop de confirmação na exclusão (enter pra confirmar e esc para cancelar)
-//InTest: Opção de editar os dados de cada registro
-
-//TODO: Opção de criar um clonar um registro
+//OK: Opção de editar os dados de cada registro
+//InTest: Opção de criar um clonar um registro
 
 //TODO: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
@@ -23,7 +22,7 @@ angular.module("app", []).controller("DomainController", [
 	"$sce",
 	"$http",
 	function($scope, $sce, $http) {
-		$scope.inpTxt_mainUrl = "http://nl4zj.mocklab.io/sager";
+		$scope.inpTxt_mainUrl = "";
 		$scope.persistURL = "";
 		$scope.records = [];
 
@@ -43,9 +42,15 @@ angular.module("app", []).controller("DomainController", [
 			deleteRecords($scope.records);
 		};
 
-		$scope.onTextAreaKeyDownEvent = function($event, id) {
+		$scope.onTextAreaEditKeyDownEvent = function($event, id) {
 			if ($event.ctrlKey && $event.keyCode === 13) {
 				$scope.onSaveEditRecord(id);
+			}
+		};
+
+		$scope.onTextAreaCloneKeyDownEvent = function($event, id) {
+			if ($event.ctrlKey && $event.keyCode === 13) {
+				$scope.onSaveCloneRecord(id);
 			}
 		};
 
@@ -57,13 +62,13 @@ angular.module("app", []).controller("DomainController", [
 					delete recordToEdit["_metadata"];
 					delete recordToEdit["id"];
 					delete recordToEdit["$$hashKey"];
-					$("#txtArea_editRecord").val(JSON.stringify(recordToEdit, undefined, 4));
+					$(".txtArea_editRecord").val(JSON.stringify(recordToEdit, undefined, 4));
 				}
 			});
 		};
 
 		$scope.onSaveEditRecord = function(id) {
-			$("#modal_edit").modal("hide");
+			$(".modal").modal("hide");
 			var obj = JSON.parse($("#txtArea_editRecord").val());
 			$scope.records.forEach(element => {
 				if (element.id === id) {
@@ -75,11 +80,48 @@ angular.module("app", []).controller("DomainController", [
 			});
 		};
 
+		$scope.onSaveEditAsNewRecord = function(id) {
+			$(".modal").modal("hide");
+			var obj = JSON.parse($("#txtArea_editRecord").val());
+			$scope.records.forEach(element => {
+				if (element.id === id) {
+					obj["_metadata"] = element._metadata;
+
+					insertRecord(obj);
+				}
+			});
+		};
+
+		$scope.onSaveCloneRecord = function(id) {
+			$(".modal").modal("hide");
+			var obj = JSON.parse($("#txtArea_cloneRecord").val());
+			$scope.records.forEach(element => {
+				if (element.id === id) {
+					obj["_metadata"] = element._metadata;
+
+					insertRecord(obj);
+				}
+			});
+		};
+
 		$scope.format = function(object) {
 			var clone = JSON.parse(JSON.stringify(object));
 			delete clone["_metadata"];
 			return clone;
 		};
+
+		function insertRecord(record) {
+			record._metadata["changeTrack"] = "create";
+
+			$http({
+				method: "POST",
+				url: $scope.persistURL,
+				data: [record]
+			}).then(function() {
+				//success
+				refreshSearch();
+			});
+		}
 
 		function updateRecord(record) {
 			record._metadata["changeTrack"] = "update";
