@@ -138,6 +138,7 @@
 												class="form-control w-100"
 												style="font-family: monospace"
 												rows="12"
+												ng-keydown="onTextAreaKeyDownEvent($event, record.id)"
 											></textarea>
 										</div>
 										<div class="modal-footer">
@@ -147,6 +148,7 @@
 											<button
 												type="button"
 												class="btn btn-primary"
+												data-dismiss="modal"
 												ng-click="onSaveEditRecord(record.id)"
 											>
 												Salvar
