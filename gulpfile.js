@@ -44,8 +44,13 @@ gulp.task("useref", function() {
 		.pipe(gulp.dest("dist"));
 });
 
+gulp.task("font-awesome", function() {
+	//para o font-awesome
+	return gulp.src("node_modules/@fortawesome/fontawesome-free/webfonts/*").pipe(gulp.dest("dist/webfonts"));
+});
+
 gulp.task("build", function(callback) {
-	runSequence("clean", ["useref", "images"], callback);
+	runSequence("clean", ["useref", "font-awesome", "images"], callback);
 });
 
 // ================= DEVELOPMENT TASKS ====================

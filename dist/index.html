@@ -18,7 +18,6 @@
 		<meta name="theme-color" content="#ffffff" />
 
 		<!-- Import Font Awesome -->
-		<link type="text/css" rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
 
 		<!-- Import Google Icon and Fonts -->
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -77,26 +76,225 @@
 				<div ng-show="records.length > 0">
 					<hr class="mb-4 mt-3" />
 					<div class="mb-3">
-						<button class="btn btn-outline-danger" ng-click="onDeleteAll()">Excluir todos</button>
+						<button
+							class="btn btn-outline-danger"
+							data-toggle="modal"
+							data-target="#modal_confirmDeleteAll"
+						>
+							Excluir todos
+						</button>
 					</div>
 					<div>
-						<div class="border rounded p-2 mb-3" ng-repeat="record in records">
-							<i class="fas fa-caret-down mr-1"></i> {{ record.id }}
-							<div class="float-right mr-2">
-								<i
-									class="fas fa-trash"
-									data-toggle="tooltip"
-									data-placement="top"
-									title="Excluir registro"
-									ng-click="onDelete(record.id)"
-								></i>
+						<div class="mb-3" ng-repeat="record in records">
+							<div class="row border rounded p-2">
+								<div
+									class="col-md-10 pointer"
+									data-toggle="collapse"
+									data-target="#div_recordData{{record.id}}"
+								>
+									<i class="fas fa-caret-down mr-1"></i> <span> {{ record.id }} </span>
+								</div>
+								<div class="col-md-2 text-right">
+									<i
+										class="fas fa-copy pointer mr-2"
+										title="Clonar registro"
+										data-toggle="modal"
+										data-target="#modal_clone"
+										ng-click="onShowEditModal(record.id)"
+									></i>
+									<i
+										class="fas fa-edit pointer mr-2"
+										title="Editar registro"
+										data-toggle="modal"
+										data-target="#modal_edit"
+										ng-click="onShowEditModal(record.id)"
+									></i>
+									<i
+										class="fas fa-trash pointer"
+										title="Excluir registro"
+										data-toggle="modal"
+										data-target="#modal_confirmDeleteById"
+										ng-click="onShowDeleteModal(record.id)"
+									></i>
+								</div>
 							</div>
+							<div class="collapse" id="div_recordData{{record.id}}">
+								<div class="card card-body">
+									<pre> {{ format(record) | json }} </pre>
+								</div>
+							</div>
+
+							<!-- Modal: Clone -->
+							<div class="modal fade" id="modal_clone" tabindex="-1" role="dialog">
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<form id="form_clone">
+											<div class="modal-header">
+												<h5 class="modal-title">Clonar</h5>
+												<button
+													type="button"
+													class="close"
+													data-dismiss="modal"
+													aria-label="Close"
+												>
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<p class="text-muted">
+													Ao salvar será criado um novo registro com um novo id e com os
+													valores informados abaixo.
+												</p>
+												<textarea
+													name="txtArea_cloneRecord"
+													id="txtArea_cloneRecord"
+													class="form-control w-100 txtArea_editRecord"
+													style="font-family: monospace"
+													rows="12"
+													ng-keydown="onTextAreaCloneKeyDownEvent($event, record.id)"
+												></textarea>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+													Cancelar
+												</button>
+												<button
+													type="button"
+													class="btn btn-primary"
+													data-dismiss="modal"
+													ng-click="onSaveCloneRecord()"
+												>
+													Salvar
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+							<!-- end modal -->
+
+							<!-- Modal: Edit -->
+							<div class="modal fade" id="modal_edit" tabindex="-1" role="dialog">
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<form id="form_edit" ng-submit="onSaveEditRecord(record.id)">
+											<div class="modal-header">
+												<h5 class="modal-title">Editar</h5>
+												<button
+													type="button"
+													class="close"
+													data-dismiss="modal"
+													aria-label="Close"
+												>
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<textarea
+													name="txtArea_editRecord"
+													id="txtArea_editRecord"
+													class="form-control w-100 txtArea_editRecord"
+													style="font-family: monospace"
+													rows="12"
+													ng-keydown="onTextAreaEditKeyDownEvent($event, record.id)"
+												></textarea>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+													Cancelar
+												</button>
+												<button
+													type="button"
+													class="btn btn-secondary"
+													data-dismiss="modal"
+													ng-click="onSaveEditAsNewRecord()"
+												>
+													Salvar como um novo
+												</button>
+												<button
+													type="button"
+													class="btn btn-primary"
+													data-dismiss="modal"
+													ng-click="onSaveEditRecord()"
+												>
+													Salvar
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+							<!-- end modal -->
+
+							<!-- Modal: Delete by id -->
+							<div
+								class="modal fade"
+								id="modal_confirmDeleteById"
+								tabindex="-1"
+								role="dialog"
+								aria-labelledby="mySmallModalLabel"
+								aria-hidden="true"
+							>
+								<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Confirma exclusão ?</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p>Confirma a exclusão do registro {{ recordIdToManipulate }}</p>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+												Cancelar
+											</button>
+											<button
+												type="button"
+												class="btn btn-primary"
+												data-dismiss="modal"
+												ng-click="onDelete(recordIdToManipulate)"
+											>
+												Confirmar
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- end Modal -->
 						</div>
 					</div>
 				</div>
 			</div>
 		</main>
 		<!-- /. container -->
+
+		<!-- Modal: Delete All -->
+		<div
+			class="modal fade"
+			id="modal_confirmDeleteAll"
+			tabindex="-1"
+			role="dialog"
+			aria-labelledby="mySmallModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Confirma excluir todos ?</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary" ng-click="onDeleteAll()">Confirmar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end Modal -->
 
 		<script src="js/main.min.js"></script>
 	</body>
