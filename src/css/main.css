@@ -81,6 +81,15 @@ body {
 -------------------------------------------------- */
 /* Not required for template. */
 
+.row {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
 .custom-panel {
 	padding: 3rem 1.5rem;
 	background-color: white;
