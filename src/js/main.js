@@ -11,24 +11,30 @@
 //OK: Opção de expandar o registro pra ver seus dados
 //OK: Colocar pop de confirmação na exclusão (enter pra confirmar e esc para cancelar)
 //OK: Opção de editar os dados de cada registro
-//InTest: Opção de criar um clonar um registro
+//OK: Opção de criar um clonar um registro
+//OK: Colocar quantidade de registros ao lado do botão excluir todos
+//OK: Subir a pasta /dist para o git e testar a execução usando apenas esta pasta num folder separado (desconfio que o font awesome não vai funcionar. Ajustar o build pra trazer o font awesome também)
+//OK: Colocar mensagens de notificação de sucesso e erro.
+//OK: Colocar mensagem quando não houver registro disponível na busca.
 
 //TODO: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
-//TODO: Subir a pasta /dist para o git e testar a execução usando apenas esta pasta num folder separado (desconfio que o font awesome não vai funcionar. Ajustar o build pra trazer o font awesome também)
 
-angular.module("app", []).controller("DomainController", [
+angular.module("app", ["cgNotify"]).controller("DomainController", [
 	"$scope",
 	"$sce",
 	"$http",
-	function($scope, $sce, $http) {
+	"notify",
+	function($scope, $sce, $http, notify) {
 		$scope.inpTxt_mainUrl = "";
 		$scope.persistURL = "";
-		$scope.records = [];
+		$scope.records = undefined;
 		$scope.recordIdToManipulate = "";
 
 		$scope.onSubmitSearch = function() {
-			refreshSearch();
+			if ($scope.inpTxt_mainUrl.trim().length > 0) {
+				refreshSearch();
+			}
 		};
 
 		$scope.onShowDeleteModal = function(id) {
@@ -128,6 +134,7 @@ angular.module("app", []).controller("DomainController", [
 			}).then(function() {
 				//success
 				refreshSearch();
+				notifySuccess("Registro salvo com sucesso!");
 			});
 		}
 
@@ -141,6 +148,7 @@ angular.module("app", []).controller("DomainController", [
 			}).then(function() {
 				//success
 				refreshSearch();
+				notifySuccess("Registro salvo com sucesso!");
 			});
 		}
 
@@ -156,6 +164,7 @@ angular.module("app", []).controller("DomainController", [
 			}).then(function() {
 				//success
 				refreshSearch();
+				notifySuccess("Registro(s) excluidos com sucesso!");
 			});
 		}
 
@@ -164,7 +173,38 @@ angular.module("app", []).controller("DomainController", [
 				$scope.records = response.data;
 				$scope.persistURL =
 					$scope.inpTxt_mainUrl.substr(0, $scope.inpTxt_mainUrl.lastIndexOf("/")) + "/persist";
+				if ($scope.records.length === 0) {
+					notifyInfo("Não foi encontrado nenhum registro.");
+				}
 				console.log($scope.records);
+			});
+		}
+
+		function notifySuccess(msg) {
+			notify({
+				message: msg,
+				classes: "alert-success",
+				templateUrl: "",
+				position: "right",
+				duration: 4000
+			});
+		}
+		function notifyError(msg) {
+			notify({
+				message: msg,
+				classes: "alert-danger",
+				templateUrl: "",
+				position: "right",
+				duration: 5000
+			});
+		}
+		function notifyInfo(msg) {
+			notify({
+				message: msg,
+				classes: "alert-info",
+				templateUrl: "",
+				position: "right",
+				duration: 4000
 			});
 		}
 	}

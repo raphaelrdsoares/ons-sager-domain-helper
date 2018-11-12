@@ -13,6 +13,7 @@
     },
     "license": "MIT",
     "dependencies": {
+        "@cgross/angular-notify": "^2.5.1",
         "@fortawesome/fontawesome-free": "^5.5.0",
         "angular": "^1.7.5",
         "bootstrap": "^4.1.3",
