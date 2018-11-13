@@ -16,8 +16,12 @@
 //OK: Subir a pasta /dist para o git e testar a execução usando apenas esta pasta num folder separado (desconfio que o font awesome não vai funcionar. Ajustar o build pra trazer o font awesome também)
 //OK: Colocar mensagens de notificação de sucesso e erro.
 //OK: Colocar mensagem quando não houver registro disponível na busca.
+//OK: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
 
-//TODO: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
+//TODO: Exibir mensagem de erro para instalar a extensão CORS caso não consiga realizar a busca
+//TODO: Exibir mensagem de erro caso a URL da busca esteja incorreta
+//TODO: Exibir msg de campos obrigatórios ao pesquisar e ao salvar a URL;
+
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
 
 var db = new Dexie("ONS_SAGER_DOMAIN_HELPER");
@@ -246,6 +250,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				duration: 4000
 			});
 		}
+
 		function notifyError(msg) {
 			notify({
 				message: msg,
@@ -255,6 +260,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				duration: 5000
 			});
 		}
+
 		function notifyInfo(msg) {
 			notify({
 				message: msg,
