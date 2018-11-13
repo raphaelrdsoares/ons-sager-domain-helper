@@ -39,18 +39,43 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		$scope.persistURL = "";
 		$scope.records = undefined;
 		$scope.recordIdToManipulate = "";
+		$scope.urls = [];
+
+		function init() {
+			refreshURLs();
+		}
+		init();
 
 		$scope.onSaveURL = function() {
-			if (inpTxt_aliasUrl.length > 0) {
+			if ($scope.inpTxt_aliasUrl.length > 0) {
 				var obj = {
 					alias: $scope.inpTxt_aliasUrl,
 					url: $scope.inpTxt_mainUrl
 				};
 				db.urls.add(obj).then(function(id) {
+					$("#div_saveURL").collapse("hide");
+					$scope.inpTxt_aliasUrl = "";
 					notifySuccess("URL salva com sucesso!");
+					refreshURLs();
 				});
 			}
 		};
+
+		$scope.onDeleteURL = function(id) {
+			db.urls
+				.where("id")
+				.equals(id)
+				.delete();
+			refreshURLs();
+		};
+
+		function refreshURLs() {
+			$scope.urls = [];
+			db.urls.toCollection().each(function(element, cursor) {
+				$scope.urls.push(element);
+				$scope.$apply();
+			});
+		}
 
 		$scope.onSubmitSearch = function() {
 			if ($scope.inpTxt_mainUrl.trim().length > 0) {

@@ -60,6 +60,13 @@
 
 		<main role="main" class="container">
 			<div class="custom-panel shadow">
+				<div class="mb-3">
+					<span class="badge badge-pill badge-primary p-2 mr-2" ng-repeat="url in urls"
+						>{{ url.alias }}
+						<i class="fas fa-times ml-2 mr-1 text-light pointer" ng-click="onDeleteURL(url.id)"></i>
+					</span>
+				</div>
+
 				<form id="form_searchByURL" ng-submit="onSubmitSearch()">
 					<div class="form-row">
 						<div class="form-group col-md-8">
