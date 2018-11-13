@@ -94,21 +94,23 @@
 						</div>
 					</div>
 				</form>
-				<div id="div_saveURL" class="form-row collapse">
-					<div class="form-group col-md-5">
-						<input
-							type="text"
-							name="inpTxt_aliasUrl"
-							id="inpTxt_aliasUrl"
-							class="form-control"
-							placeholder="Alias da URL. Ex: Consolidação Mensal"
-							ng-model="inpTxt_aliasUrl"
-						/>
+				<form ng-submit="onSaveURL()">
+					<div id="div_saveURL" class="form-row collapse">
+						<div class="form-group col-md-5">
+							<input
+								type="text"
+								name="inpTxt_aliasUrl"
+								id="inpTxt_aliasUrl"
+								class="form-control"
+								placeholder="Alias da URL. Ex: Consolidação Mensal"
+								ng-model="inpTxt_aliasUrl"
+							/>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-outline-primary">Salvar</button>
+						</div>
 					</div>
-					<div class="form-group">
-						<button class="btn btn-outline-primary" ng-click="onSaveURL()">Salvar</button>
-					</div>
-				</div>
+				</form>
 				<div id="div_records" ng-show="records">
 					<hr class="mb-4 mt-3" />
 					<div ng-show="records.length === 0"><p class="text-muted">Nenhum registro foi encontrado</p></div>
