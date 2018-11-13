@@ -69,6 +69,17 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 			refreshURLs();
 		};
 
+		$scope.onSelectURL = function(id) {
+			var selectedURL = undefined;
+			$scope.urls.forEach(element => {
+				if (element.id === id) selectedURL = element;
+			});
+			if (selectedURL) {
+				$scope.inpTxt_mainUrl = selectedURL.url;
+				$scope.onSubmitSearch();
+			}
+		};
+
 		function refreshURLs() {
 			$scope.urls = [];
 			db.urls.toCollection().each(function(element, cursor) {
