@@ -80,12 +80,12 @@
 							/>
 						</div>
 						<div class="col-md-2">
-							<button type="submit" class="btn btn-primary btn-block">Buscar</button>
+							<button type="submit" class="btn btn-primary btn-block btn-square">Buscar</button>
 						</div>
 						<div class="col-md-2">
 							<button
 								type="button"
-								class="btn btn-outline-secondary btn-block"
+								class="btn btn-outline-secondary btn-block btn-square"
 								data-toggle="collapse"
 								data-target="#div_saveURL"
 							>
@@ -107,7 +107,7 @@
 							/>
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-outline-primary">Salvar</button>
+							<button type="submit" class="btn btn-outline-primary btn-square">Salvar</button>
 						</div>
 					</div>
 				</form>
@@ -117,12 +117,20 @@
 					<div ng-show="records.length > 0">
 						<div class="mb-3">
 							<button
-								class="btn btn-outline-danger"
+								class="btn btn-outline-danger btn-square"
 								data-toggle="modal"
 								data-target="#modal_confirmDeleteAll"
 							>
 								Excluir todos
 							</button>
+							<button
+								id="btn_collapseAll"
+								class="btn btn-light btn-square"
+								ng-click="onCollapseAllRecordData()"
+							>
+								Expandir todos
+							</button>
+
 							<div class="float-right align-bottom">
 								<span class="text-muted "> {{ records.length }} registros</span>
 							</div>
@@ -161,7 +169,7 @@
 										></i>
 									</div>
 								</div>
-								<div class="collapse" id="div_recordData{{record.id}}">
+								<div class="collapse div_recordData" id="div_recordData{{record.id}}">
 									<div class="card card-body">
 										<pre> {{ format(record) | json }} </pre>
 									</div>

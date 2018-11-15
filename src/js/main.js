@@ -179,6 +179,16 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 			});
 		};
 
+		$scope.onCollapseAllRecordData = function() {
+			$(".div_recordData").on("hide.bs.collapse", function() {
+				$("#btn_collapseAll").html("Expandir todos");
+			});
+			$(".div_recordData").on("show.bs.collapse", function() {
+				$("#btn_collapseAll").html("Recolher todos");
+			});
+			$(".div_recordData").collapse("toggle");
+		};
+
 		$scope.format = function(object) {
 			var clone = JSON.parse(JSON.stringify(object));
 			delete clone["_metadata"];
