@@ -17,9 +17,11 @@
 //OK: Colocar mensagens de notificação de sucesso e erro.
 //OK: Colocar mensagem quando não houver registro disponível na busca.
 //OK: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
+//OK: Exibir mensagem de erro para instalar a extensão CORS caso não consiga realizar a busca
+//OK: Exibir mensagem de erro caso a URL da busca esteja incorreta
 
-//TODO: Exibir mensagem de erro para instalar a extensão CORS caso não consiga realizar a busca
-//TODO: Exibir mensagem de erro caso a URL da busca esteja incorreta
+//TODO: Ajustar o zipping (no starter-template também)
+//TODO: Colocar tela de carregamente
 //TODO: Exibir msg de campos obrigatórios ao pesquisar e ao salvar a URL;
 
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
@@ -44,6 +46,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		$scope.records = undefined;
 		$scope.recordIdToManipulate = "";
 		$scope.urls = [];
+		$scope.errorCode = undefined;
 
 		function init() {
 			refreshURLs();
@@ -230,15 +233,21 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		}
 
 		function refreshSearch() {
-			$http.get($scope.inpTxt_mainUrl).then(function(response) {
-				$scope.records = response.data;
-				$scope.persistURL =
-					$scope.inpTxt_mainUrl.substr(0, $scope.inpTxt_mainUrl.lastIndexOf("/")) + "/persist";
-				if ($scope.records.length === 0) {
-					notifyInfo("Não foi encontrado nenhum registro.");
+			$scope.errorCode = undefined;
+			$http.get($scope.inpTxt_mainUrl).then(
+				function(response) {
+					$scope.records = response.data;
+					$scope.persistURL =
+						$scope.inpTxt_mainUrl.substr(0, $scope.inpTxt_mainUrl.lastIndexOf("/")) + "/persist";
+					if ($scope.records.length === 0) {
+						notifyInfo("Não foi encontrado nenhum registro.");
+					}
+					console.log($scope.records);
+				},
+				function(responseError) {
+					$scope.errorCode = responseError.status;
 				}
-				console.log($scope.records);
-			});
+			);
 		}
 
 		function notifySuccess(msg) {

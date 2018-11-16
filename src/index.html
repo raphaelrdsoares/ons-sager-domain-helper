@@ -111,6 +111,20 @@
 						</div>
 					</div>
 				</form>
+
+				<div id="div_errors" class="alert alert-danger" role="alert" ng-show="errorCode">
+					<div id="div_errorCrossOrigin" ng-show="errorCode === -1">
+						Para realizar requisições a uma URL no domínio local é necessário instalar e ativar a extensão
+						<a
+							href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi"
+							target="_blank"
+							rel="noopener noreferrer"
+							>CORS</a
+						>. Caso a mesma já esteja instalada e ativada, tente desativar e ativar novamente.
+					</div>
+					<div id="div_error" ng-show="errorCode === 400">A URL informada está inválida!</div>
+				</div>
+
 				<div id="div_records" ng-show="records">
 					<hr class="mb-4 mt-3" />
 					<div ng-show="records.length === 0"><p class="text-muted">Nenhum registro foi encontrado</p></div>
