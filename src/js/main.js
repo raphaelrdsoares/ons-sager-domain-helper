@@ -55,6 +55,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		}
 		init();
 
+		//#region CRUD de URL
 		$scope.onSaveURL = function() {
 			$scope.showLoadingScreen = true;
 			if ($scope.inpTxt_aliasUrl.length > 0) {
@@ -99,7 +100,9 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				$scope.$apply();
 			});
 		}
+		//#endregion
 
+		//#region CRUD dos registros genericos
 		$scope.onSubmitSearch = function() {
 			if ($scope.inpTxt_mainUrl.trim().length > 0) {
 				$scope.showLoadingScreen = true;
@@ -271,6 +274,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				}
 			);
 		}
+		//#endregion
 
 		function notifySuccess(msg) {
 			notify({
