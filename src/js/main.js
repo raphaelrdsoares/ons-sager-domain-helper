@@ -47,6 +47,8 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		$scope.recordIdToManipulate = "";
 		$scope.urls = [];
 		$scope.errorCode = undefined;
+		$scope.showLoadingScreen = false;
+		$scope.isCollapsed = true;
 
 		function init() {
 			refreshURLs();
@@ -54,6 +56,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		init();
 
 		$scope.onSaveURL = function() {
+			$scope.showLoadingScreen = true;
 			if ($scope.inpTxt_aliasUrl.length > 0) {
 				var obj = {
 					alias: $scope.inpTxt_aliasUrl,
@@ -64,6 +67,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 					$scope.inpTxt_aliasUrl = "";
 					notifySuccess("URL salva com sucesso!");
 					refreshURLs();
+					$scope.showLoadingScreen = false;
 				});
 			}
 		};
@@ -77,6 +81,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		};
 
 		$scope.onSelectURL = function(id) {
+			$scope.showLoadingScreen = true;
 			var selectedURL = undefined;
 			$scope.urls.forEach(element => {
 				if (element.id === id) selectedURL = element;
@@ -97,6 +102,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		$scope.onSubmitSearch = function() {
 			if ($scope.inpTxt_mainUrl.trim().length > 0) {
+				$scope.showLoadingScreen = true;
 				refreshSearch();
 			}
 		};
@@ -107,6 +113,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		$scope.onDelete = function(id) {
 			$(".modal").modal("hide");
+			$scope.showLoadingScreen = true;
 			var recordToDelete = undefined;
 			$scope.records.forEach(element => {
 				if (element.id === id) recordToDelete = element;
@@ -147,6 +154,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		$scope.onSaveEditRecord = function() {
 			$(".modal").modal("hide");
+			$scope.showLoadingScreen = true;
 			var obj = JSON.parse($("#txtArea_editRecord").val());
 			$scope.records.forEach(element => {
 				if (element.id === $scope.recordIdToManipulate) {
@@ -160,6 +168,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		$scope.onSaveEditAsNewRecord = function() {
 			$(".modal").modal("hide");
+			$scope.showLoadingScreen = true;
 			var obj = JSON.parse($("#txtArea_editRecord").val());
 			$scope.records.forEach(element => {
 				if (element.id === $scope.recordIdToManipulate) {
@@ -172,6 +181,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		$scope.onSaveCloneRecord = function() {
 			$(".modal").modal("hide");
+			$scope.showLoadingScreen = true;
 			var obj = JSON.parse($("#txtArea_cloneRecord").val());
 			$scope.records.forEach(element => {
 				if (element.id === $scope.recordIdToManipulate) {
@@ -183,13 +193,8 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 		};
 
 		$scope.onCollapseAllRecordData = function() {
-			$(".div_recordData").on("hide.bs.collapse", function() {
-				$("#btn_collapseAll").html("Expandir todos");
-			});
-			$(".div_recordData").on("show.bs.collapse", function() {
-				$("#btn_collapseAll").html("Recolher todos");
-			});
-			$(".div_recordData").collapse("toggle");
+			$scope.isCollapsed = !$scope.isCollapsed;
+			$(".div_recordData").collapse($scope.isCollapsed ? "hide" : "show");
 		};
 
 		$scope.format = function(object) {
@@ -209,6 +214,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				//success
 				refreshSearch();
 				notifySuccess("Registro salvo com sucesso!");
+				$scope.showLoadingScreen = false;
 			});
 		}
 
@@ -223,6 +229,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				//success
 				refreshSearch();
 				notifySuccess("Registro salvo com sucesso!");
+				$scope.showLoadingScreen = false;
 			});
 		}
 
@@ -239,6 +246,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				//success
 				refreshSearch();
 				notifySuccess("Registro(s) excluidos com sucesso!");
+				$scope.showLoadingScreen = false;
 			});
 		}
 
@@ -253,9 +261,13 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 						notifyInfo("Não foi encontrado nenhum registro.");
 					}
 					console.log($scope.records);
+					$scope.showLoadingScreen = false;
+					$scope.isCollapsed = true;
 				},
 				function(responseError) {
+					console.log(responseError);
 					$scope.errorCode = responseError.status;
+					$scope.showLoadingScreen = false;
 				}
 			);
 		}

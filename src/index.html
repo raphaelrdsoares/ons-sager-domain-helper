@@ -34,6 +34,10 @@
 	</head>
 
 	<body ng-controller="DomainController as controller">
+		<div id="div_loading" ng-show="showLoadingScreen">
+			<div id="div_loadingImg"><img src="images/loading.svg" alt="loading image" /></div>
+		</div>
+
 		<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 			<a class="navbar-brand" href="#">ONS SAGER Domain Helper</a>
 			<button
@@ -74,18 +78,18 @@
 								type="url"
 								name="inpTxt_mainUrl"
 								id="inpTxt_mainUrl"
-								class="form-control"
+								class="form-control rounded-0"
 								placeholder="URL do serviço. Ex: http://localhost/sager/..."
 								ng-model="inpTxt_mainUrl"
 							/>
 						</div>
 						<div class="col-md-2">
-							<button type="submit" class="btn btn-primary btn-block btn-square">Buscar</button>
+							<button type="submit" class="btn btn-primary btn-block rounded-0">Buscar</button>
 						</div>
 						<div class="col-md-2">
 							<button
 								type="button"
-								class="btn btn-outline-secondary btn-block btn-square"
+								class="btn btn-outline-secondary btn-block rounded-0"
 								data-toggle="collapse"
 								data-target="#div_saveURL"
 							>
@@ -107,12 +111,12 @@
 							/>
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-outline-primary btn-square">Salvar</button>
+							<button type="submit" class="btn btn-outline-primary rounded-0">Salvar</button>
 						</div>
 					</div>
 				</form>
 
-				<div id="div_errors" class="alert alert-danger" role="alert" ng-show="errorCode">
+				<div id="div_errors" class="alert alert-danger rounded-0" role="alert" ng-show="errorCode">
 					<div id="div_errorCrossOrigin" ng-show="errorCode === -1">
 						Para realizar requisições a uma URL no domínio local é necessário instalar e ativar a extensão
 						<a
@@ -131,7 +135,7 @@
 					<div ng-show="records.length > 0">
 						<div class="mb-3">
 							<button
-								class="btn btn-outline-danger btn-square"
+								class="btn btn-outline-danger rounded-0"
 								data-toggle="modal"
 								data-target="#modal_confirmDeleteAll"
 							>
@@ -139,10 +143,10 @@
 							</button>
 							<button
 								id="btn_collapseAll"
-								class="btn btn-light btn-square"
+								class="btn btn-light rounded-0"
 								ng-click="onCollapseAllRecordData()"
 							>
-								Expandir todos
+								{{ isCollapsed ? "Expandir" : "Recolher" }} todos
 							</button>
 
 							<div class="float-right align-bottom">
@@ -151,7 +155,7 @@
 						</div>
 						<div>
 							<div class="mb-3" ng-repeat="record in records">
-								<div class="row border rounded p-2">
+								<div class="row border p-2">
 									<div
 										class="col-md-10 pointer"
 										data-toggle="collapse"
@@ -184,7 +188,7 @@
 									</div>
 								</div>
 								<div class="collapse div_recordData" id="div_recordData{{record.id}}">
-									<div class="card card-body">
+									<div class="card card-body rounded-0">
 										<pre> {{ format(record) | json }} </pre>
 									</div>
 								</div>
