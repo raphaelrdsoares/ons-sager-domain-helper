@@ -54,7 +54,7 @@ gulp.task("zip-dist", () =>
 	gulp
 		.src("dist/*")
 		.pipe(zip("dist.zip"))
-		.pipe(gulp.dest("dist"))
+		.pipe(gulp.dest("./"))
 );
 
 gulp.task("build", function(callback) {
