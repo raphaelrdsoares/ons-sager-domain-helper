@@ -25,6 +25,7 @@
 //TODO: Exibir msg de campos obrigatórios ao pesquisar e ao salvar a URL;
 
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
+//TODO: Trocar os campos de input de string pra Object. Ex: field_mainUrl = {value: "", isValid: true}; Caso o isValid seja false, exibir mensagem de erro abaixo do campo e colocar o campo com estilo vermelho
 
 var db = new Dexie("ONS_SAGER_DOMAIN_HELPER");
 db.version(1).stores({
