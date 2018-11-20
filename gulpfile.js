@@ -56,7 +56,7 @@ gulp.task("font-awesome", function() {
 
 gulp.task("zip-dist", () =>
 	gulp
-		.src("dist/*")
+		.src("dist/**/*")
 		.pipe(zip("dist.zip"))
 		.pipe(gulp.dest("./"))
 );

@@ -19,13 +19,13 @@
 //OK: Opção de salvar a URL (com um alias) + exibir os alias das URLs salvar em cima pra facilitar. Ao clicar no link do alias, carregar a URL no input e já realizar a busca
 //OK: Exibir mensagem de erro para instalar a extensão CORS caso não consiga realizar a busca
 //OK: Exibir mensagem de erro caso a URL da busca esteja incorreta
+//OK: Trocar os campos de input de string pra Object. Ex: field_mainUrl = {value: "", errorMsg: ""}; Caso o errorMsg seja esteja preenchido, exibir o conteúdo da mensagem de erro abaixo do campo e colocar o campo com estilo vermelho
+//OK: Exibir msg de campos obrigatórios ao pesquisar e ao salvar a URL;
+//OK: Colocar tela de carregamente
 
-//TODO: Ajustar o zipping (no starter-template também)
-//TODO: Colocar tela de carregamente
-//TODO: Exibir msg de campos obrigatórios ao pesquisar e ao salvar a URL;
+//TODO: Copiar todas as alterações efetuadas para o starter-template também
 
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
-//TODO: Trocar os campos de input de string pra Object. Ex: field_mainUrl = {value: "", errorMsg: ""}; Caso o errorMsg seja esteja preenchido, exibir o conteúdo da mensagem de erro abaixo do campo e colocar o campo com estilo vermelho
 //TODO: Converter algumas funcionalidades em Serviços e/ou subcontrollers
 
 var db = new Dexie("ONS_SAGER_DOMAIN_HELPER");
@@ -42,8 +42,14 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 	"$http",
 	"notify",
 	function($scope, $sce, $http, notify) {
-		$scope.inpTxt_mainUrl = "";
-		$scope.inpTxt_aliasUrl = "";
+		$scope.field_mainUrl = {
+			value: "",
+			errorMsg: ""
+		};
+		$scope.field_aliasUrl = {
+			value: "",
+			errorMsg: ""
+		};
 		$scope.persistURL = "";
 		$scope.records = undefined;
 		$scope.recordIdToManipulate = "";
@@ -59,20 +65,32 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		//#region CRUD de URL
 		$scope.onSaveURL = function() {
-			$scope.showLoadingScreen = true;
-			if ($scope.inpTxt_aliasUrl.length > 0) {
-				var obj = {
-					alias: $scope.inpTxt_aliasUrl,
-					url: $scope.inpTxt_mainUrl
-				};
-				db.urls.add(obj).then(function(id) {
-					$("#div_saveURL").collapse("hide");
-					$scope.inpTxt_aliasUrl = "";
-					notifySuccess("URL salva com sucesso!");
-					refreshURLs();
-					$scope.showLoadingScreen = false;
-				});
+			$scope.field_aliasUrl.errorMsg = "";
+			$scope.field_mainUrl.errorMsg = "";
+			var isFormValid = true;
+
+			if ($scope.field_aliasUrl.value.trim().length === 0) {
+				$scope.field_aliasUrl.errorMsg = "Este campo é obrigatório.";
+				isFormValid = false;
 			}
+			if ($scope.field_mainUrl.value.trim().length <= 0) {
+				$scope.field_mainUrl.errorMsg = "Este campo é obrigatório.";
+				isFormValid = false;
+			}
+			if (!isFormValid) return;
+
+			$scope.showLoadingScreen = true;
+			var obj = {
+				alias: $scope.field_aliasUrl.value,
+				url: $scope.field_mainUrl.value
+			};
+			db.urls.add(obj).then(function(id) {
+				$("#div_saveURL").collapse("hide");
+				$scope.field_aliasUrl.value = "";
+				notifySuccess("URL salva com sucesso!");
+				refreshURLs();
+				$scope.showLoadingScreen = false;
+			});
 		};
 
 		$scope.onDeleteURL = function(id) {
@@ -90,7 +108,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 				if (element.id === id) selectedURL = element;
 			});
 			if (selectedURL) {
-				$scope.inpTxt_mainUrl = selectedURL.url;
+				$scope.field_mainUrl.value = selectedURL.url;
 				$scope.onSubmitSearch();
 			}
 		};
@@ -106,10 +124,13 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		//#region CRUD dos registros genericos
 		$scope.onSubmitSearch = function() {
-			if ($scope.inpTxt_mainUrl.trim().length > 0) {
-				$scope.showLoadingScreen = true;
-				refreshSearch();
+			$scope.field_mainUrl.errorMsg = "";
+			if ($scope.field_mainUrl.value.trim().length <= 0) {
+				$scope.field_mainUrl.errorMsg = "Este campo é obrigatório.";
+				return;
 			}
+			$scope.showLoadingScreen = true;
+			refreshSearch();
 		};
 
 		$scope.onShowDeleteModal = function(id) {
@@ -257,11 +278,11 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		function refreshSearch() {
 			$scope.errorCode = undefined;
-			$http.get($scope.inpTxt_mainUrl).then(
+			$http.get($scope.field_mainUrl.value).then(
 				function(response) {
 					$scope.records = response.data;
 					$scope.persistURL =
-						$scope.inpTxt_mainUrl.substr(0, $scope.inpTxt_mainUrl.lastIndexOf("/")) + "/persist";
+						$scope.field_mainUrl.value.substr(0, $scope.field_mainUrl.value.lastIndexOf("/")) + "/persist";
 					if ($scope.records.length === 0) {
 						notifyInfo("Não foi encontrado nenhum registro.");
 					}

@@ -70,19 +70,25 @@
 						<i class="fas fa-times ml-2 mr-1 text-light pointer" ng-click="onDeleteURL(url.id)"></i>
 					</span>
 				</div>
-
 				<form id="form_searchByURL" ng-submit="onSubmitSearch()">
 					<div class="form-row">
 						<div class="form-group col-md-8">
 							<input
 								type="url"
-								name="inpTxt_mainUrl"
-								id="inpTxt_mainUrl"
+								name="field_mainUrl"
+								id="field_mainUrl"
 								class="form-control rounded-0"
 								placeholder="URL do serviço. Ex: http://localhost/sager/..."
-								ng-model="inpTxt_mainUrl"
+								ng-class="field_mainUrl.errorMsg.length > 0 ? 'is-invalid': ''"
+								ng-model="field_mainUrl.value"
 							/>
+							<small
+								id="fieldError_mainUrl"
+								class="form-text text-danger"
+								ng-bind="field_mainUrl.errorMsg"
+							></small>
 						</div>
+
 						<div class="col-md-2">
 							<button type="submit" class="btn btn-primary btn-block rounded-0">Buscar</button>
 						</div>
@@ -103,12 +109,18 @@
 						<div class="form-group col-md-5">
 							<input
 								type="text"
-								name="inpTxt_aliasUrl"
-								id="inpTxt_aliasUrl"
-								class="form-control"
+								name="field_aliasUrl"
+								id="field_aliasUrl"
+								class="form-control rounded-0"
+								ng-class="field_aliasUrl.errorMsg.length > 0 ? 'is-invalid': ''"
 								placeholder="Alias da URL. Ex: Consolidação Mensal"
-								ng-model="inpTxt_aliasUrl"
+								ng-model="field_aliasUrl.value"
 							/>
+							<small
+								id="field_aliasUrl"
+								class="form-text text-danger"
+								ng-bind="field_aliasUrl.errorMsg"
+							></small>
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-outline-primary rounded-0">Salvar</button>
