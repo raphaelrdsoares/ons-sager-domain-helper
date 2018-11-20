@@ -23,6 +23,7 @@ const del = require("del");
 const runSequence = require("run-sequence");
 const imagemin = require("gulp-imagemin");
 const zip = require("gulp-zip");
+const htmlmin = require("gulp-htmlmin");
 
 // ================= BUILD TASKS ====================
 gulp.task("clean", function() {
@@ -42,6 +43,9 @@ gulp.task("useref", function() {
 		.pipe(useref())
 		.pipe(gulpIf("*.js", minify({ noSource: true, ext: { min: ".js" } }))) // Minifies only if it's a JavaScript file
 		.pipe(gulpIf("*.css", cssnano())) // Minifies only if it's a CSS file
+		.pipe(
+			gulpIf("*.html", htmlmin({ collapseWhitespace: true, removeComments: true, removeEmptyAttributes: true }))
+		) // Minifies only if it's a HTML file
 		.pipe(gulp.dest("dist"));
 });
 
