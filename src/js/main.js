@@ -116,10 +116,14 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		function refreshURLs() {
 			$scope.urls = [];
-			db.urls.toCollection().each(function(element, cursor) {
-				$scope.urls.push(element);
-				$scope.$apply();
-			});
+
+			db.urls
+				.toCollection()
+				.sortBy("alias")
+				.then(data => {
+					$scope.urls = data;
+					$scope.$apply();
+				});
 		}
 		//#endregion
 
