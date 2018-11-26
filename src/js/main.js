@@ -25,6 +25,7 @@
 
 //TODO: Copiar todas as alterações efetuadas para o starter-template também
 
+//ToDo: Prover alguma forma de editar em lote;
 //TODO: Opção de buscar por todos os tipos. Ao exibir os registros, caso sejam de tipos diferentes, exibir o tipo junto com o id. Lembrar de verificar a url de persistência.
 //TODO: Converter algumas funcionalidades em Serviços e/ou subcontrollers
 
@@ -149,6 +150,7 @@ angular.module("app", ["cgNotify"]).controller("DomainController", [
 
 		$scope.onDeleteAll = function() {
 			$(".modal").modal("hide");
+			$scope.showLoadingScreen = true;
 			deleteRecords($scope.records);
 		};
 
